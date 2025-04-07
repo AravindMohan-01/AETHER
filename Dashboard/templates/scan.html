@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+        <link rel="icon" href="{{ url_for('static', filename='aethers.png') }}" type="image/png" sizes="16x16">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>AETHER</title>
+		<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:700, 600,500,400,300' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="{{ url_for('static', filename='main.css')}}">
+
+		<script src="{{ url_for('static', filename='jquery.min.js')}}"></script>
+  		<script src="{{ url_for('static', filename='bootstrap.min.js')}}"></script>
+
+		<script type="text/javascript" src="{{ url_for('static', filename='main.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='scan.js') }}"></script>
+            
+            <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-table.min.css') }}">
+            <script src="{{ url_for('static', filename='bootstrap-table.min.js') }}"></script>
+
+	</head>
+
+	<body><script>
+        
+
+				function loadDoc() 
+				{
+                    var appname = document.getElementById("appname").value;
+					var url = document.getElementById("url").value;
+					var method = document.getElementById("method").value;
+					var req_headers = document.getElementById("req_headers").value;
+					var req_body = document.getElementById("req_body").value;
+				  	var auth_header = document.getElementById("authheader").value;
+					//var auth_url = document.getElementById("authurl").value;
+					var auth_url = '';
+				  	body_data = {"appname" : appname, "url":url, "headers" : req_headers, "body" : req_body, "method" : method, "auth_header": auth_header, "auth_url":auth_url};
+
+				  	json_body = JSON.stringify(body_data);
+
+				  	var xhttp = new XMLHttpRequest();
+				  	xhttp.onreadystatechange = function() {
+				    if (this.readyState == 4 && this.status == 200)
+						{
+							alert(xhttp.responseText);
+							recent_scans();
+						}
+		  	   		};
+				  	xhttp.open("POST", "/scan/", true);
+				   	xhttp.setRequestHeader("Content-type", "application/json");
+		  			xhttp.send(json_body);
+				}
+				
+				function loadPostman() 
+				{
+                    var appname = document.getElementById("appname").value;
+					var url = document.getElementById("url").value;
+					//var auth_url = document.getElementById("authurl").value;
+					var auth_url = '';
+					const files = document.querySelector('[name=file]').files;
+					var auth_header = document.getElementById("authheader").value;
+					const formData = new FormData();
+					console.log(files);
+					formData.append('file', files[0]);
+					formData.append('appname', appname);
+					formData.append('url', url);
+					formData.append('auth_url',auth_url);
+					formData.append('authheader',auth_header);
+				  	var xhttp = new XMLHttpRequest();
+					xhttp.open("POST", "/scan/postman/", true);
+					//xhttp.responseType = 'json';
+				  	xhttp.onreadystatechange = function() {
+				    if (this.readyState == 4 && this.status == 200)
+						{
+							alert(xhttp.responseText);
+							recent_scans();
+						}
+		  	   		};
+				   	//xhttp.setRequestHeader("Content-type", "application/json");
+		  			xhttp.send(formData);
+				}
+				function singleOrPostman()
+				{
+					var checkBox = document.getElementById("check");
+  					// Get the output text
+					var single = document.getElementById("single-scan");
+					var postman = document.getElementById("multiple-scan"); 
+
+					// If the checkbox is checked, display the output text
+					if (checkBox.checked == true){
+						single.style.display = "none";
+						postman.style.display = "block";
+					} else {
+						single.style.display = "block";
+						postman.style.display = "none";
+					}
+				}
+</script>
+
+<!-- Top Right Corner Image -->
+<img src="{{ url_for('static', filename='college.png') }}" alt="Top Right Icon"
+     style="position: absolute; top: 15px; right: 15px; width: 150px; height: 75px; padding: 10px;">
+
+<div class="side-nav" id="side">
+    <div class="logo" style="text-align: center; padding: 15px;">
+        <img src="{{ url_for('static', filename='aethers.png') }}" alt="Astra Logo" 
+             style="width: 100px; height: auto; display: block; margin: 0 auto;">
+    </div>
+    <nav>
+        <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="padding: 16px; text-align: center;">
+                <a href="scan.html" style="color: white; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                    <i class="fa fa-flash" style="margin-right: 10px; color: #00D4FF;"></i> Scan
+                </a>
+            </li>
+            <li style="padding: 16px; text-align: center;">
+                <a href="reports.html" style="color: white; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                    <i class="fa fa-envelope" style="margin-right: 10px; color: #00D4FF;"></i> Reports
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+		<div id="side-update">
+
+			<div class="main-content"> 
+					<div class="title">New Scan</div> 
+					<div class="main"> 
+						<div class="widget"> 
+							<div class="chart"></div> 
+
+    					<form method="POST" action="#" class="col-md-5">
+                        <div class="form-group">
+                                <label for="appname">Product Name</label>
+                                <input type="text" class="form-control" name="appname" id="appname">
+                            </div>
+
+	     	 				<div class="form-group">
+	      		   				<label for="url">URL</label>
+	       		  				<input type="text" class="form-control" name="url" id="url">
+	     	   				</div>
+								<div class="form-groups" style="display: flex; flex-direction: column; align-items: flex-start; gap: 10px; width: 100%;">
+									<!-- Authorization Token -->
+									<label for="req_headers" style="font-weight: bold; color: #00D4FF;">AUTHORIZATION TOKEN</label>
+									<input type="text" class="form-control" name="Auth_header" id="authheader" required style="width: 100%; max-width: 500px;"/>
+								
+									<!-- Toggle Switch with Labels -->
+									<div style="display: flex; align-items: center; gap: 10px;">
+										<span style="color: #00D4FF;">Single Endpoint</span>
+										<label class="switch">
+											<input id="check" type="checkbox" onclick="singleOrPostman();">
+											<span class="slider round"></span>
+										</label>
+										<span style="color: #00D4FF;">Postman Collection</span>
+									</div>
+								</div>
+							
+							<div id="single-scan">
+								<div class="form-group">
+									<label for="method">Method</label>
+									<select class="form-control" name="method" id="method">
+										<option value="GET">GET</option>
+										<option value="POST">POST</option>
+										<option value="POST">PUT</option>
+										<option value="POST">DEL</option>
+									</select>
+								</div>
+
+								<div class="form-group">
+									<label for="req_headers">Headers</label>
+									<textarea class="form-control" rows="5" name="req_headers" id="req_headers" placeholder='{"Content-type" : "application/json", "access_token" : "X123B12DF"}'></textarea>
+									
+									<!-- <pre class="col-md-5">Example:<br> {"Content-type" : "application/json", "access_token" : "X123B12DF"}</pre> -->
+
+								</div>
+
+								<div class="form-group">
+									<label for="req_body">Body</label>
+									<textarea class="form-control" rows="5" name="req_body" id="req_body" placeholder='{"first_name":"flipkart","last_name":"appsec"}'></textarea>
+								</div>
+								
+								<button type="button" name="btn_report" class="btn btn-primary" onclick=loadDoc();>Submit</button><br><br>
+							 </div>
+							 <div id="multiple-scan" style="display: none;">
+							 <!-- <label for="req_headers">Authorization Token</label> 
+								<input type="text" class="form-control" name="Auth_url" id="authurl" required /><br>-->
+								<div class="mb-3">
+									<label for="formFile" class="form-label" style="color: #00D4FF;">Postman File</label>
+									<input class="form-control btn" type="file" id="formFile" name="file">
+								</div> <br>
+								<button type="button" role="btn_report2" class="btn btn-primary" onclick=loadPostman();>Upload Postman</button><br><br>
+								
+								
+							</div>
+                            <label>Recent Scans:</label><br><br>
+          					
+                            <div class="container">
+                                <table id="table">
+                                <thead>
+                                    <tr>
+                                        <th data-field="id">No</th>
+                                        <th data-field="name">Product Name</th>
+                                        <th data-field="scanid">url</th>
+                                        <th data-field="scan_status">Status</th>
+
+                                    </tr>
+                                </thead>
+                            </table>
+                            </div>
+
+
+
+                                <script>
+                                document.onload = recent_scans();
+                                setInterval(function(){
+                                        recent_scans() 
+                                    }, 5000);
+
+          						</script>
+          							
+          						</div>
+          						
+          					</div>
+
+          				</form>
+
+          				
+          				</div> 
+
+	     			</div> 
+				</div>';
+			
+		</div>
+
+		
+
+					</div> 
+				</div> 
+			</div> 
+		</div> 
+
+
+     
+	</body>
+</html>
