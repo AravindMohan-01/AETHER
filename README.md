@@ -73,15 +73,12 @@ source venv/bin/activate
 # 3. Install Python dependencies
 pip install -r requirements.txt
 
-# 4. Create necessary folders (if not present)
-mkdir -p Files logs Payloads
-
-# 5. Ensure MongoDB and Redis are running
+# 4. Ensure MongoDB and Redis are running
 # (adjust based on OS and install method)
 
-# 6. Start the backend Flask server
+# 5. Start the backend Flask server
 cd API
 python3 app.py
 
-#7. You can now access the dashboard at:
+#6. You can now access the dashboard at:
 http://localhost:8094
